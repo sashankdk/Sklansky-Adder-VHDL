@@ -1,0 +1,283 @@
+module sklanskyadder( d1,d2,cin,sum,cout);
+  input [31:0] d1;
+    input [31:0] d2;
+    input cin;
+    output cout;
+    output [31:0] sum;
+wire [31:0] logic01;
+wire [31:0] logic02;
+wire [31:0] logic11;
+wire [31:0] logic12;
+wire [31:0] logic21;
+wire [31:0] logic22;
+wire [31:0] logic31;
+wire [31:0] logic32;
+wire [31:0] logic41;
+
+generate
+begin
+for(i=0;i<32;i=i+1)
+ assign logic01[i] = d1[i] & d2[i];
+end
+endgenerate
+
+generate 
+begin
+for(i=0;i<32;i=i+1)
+ assign logic02[i] = d1[i]^d2[i];
+end
+endgenerate
+
+generate
+begin
+for(j=0;j<16;j=j+1)
+ assign logic11[2*j] = logic01[2*j] ,
+        logic12[2*j] = logic02[2*j];
+end
+endgenerate
+
+generate
+begin
+for(j=0;j<16;j=j+1)
+ assign logic11[2*j+1] = logic01[2*j+1] | (logic01[2*j] & logic02[2*j+1]),
+        logic12[2*j+1] = logic02[2*j+1] & logic02[2*j] ;
+end
+endgenerate
+
+
+
+generate
+begin
+for(j=0;j<8;j=j+1)
+ assign logic21[4*j] = logic11[4*j] ,
+        logic22[4*j] = logic12[4*j],
+        logic21[4*j+1] = logic11[4*j+1] ,
+        logic22[4*j+1] = logic12[4*j+1];
+end
+endgenerate
+
+
+
+generate
+begin
+for(j=0;j<8;j=j+1)
+ assign logic21[4*j+2] = logic11[4*j+2] | (logic11[4*j+1] & logic12[4*j+2]),
+        logic22[4*j+2] = logic12[4*j+2] & logic12[4*j+1] ,
+        logic21[4*j+3] = logic11[4*j+3] | (logic11[4*j+1] & logic12[4*j+3]),
+        logic22[4*j+3] = logic12[4*j+3] & logic12[4*j+1] ;
+end
+endgenerate
+
+
+generate
+begin
+for(j=0;j<4;j=j+1)
+  assign logic31[8*j] = logic21[8*j] ,
+         logic32[8*j] = logic22[8*j],
+         logic31[8*j+1] = logic21[8*j+1] ,
+         logic32[8*j+1] = logic22[8*j+1],
+         logic31[8*j+2] = logic21[8*j+2] ,
+         logic32[8*j+2] = logic22[8*j+2],
+         logic31[8*j+3] = logic21[8*j+3] ,
+         logic32[8*j+3] = logic22[8*j+3];
+end
+endgenerate
+
+
+generate
+begin
+for(j=0;j<4;j=j+1)
+ assign logic31[8*j+4] = logic21[8*j+4] | (logic21[8*j+3] & logic22[8*j+4]),
+        logic32[8*j+4] = logic22[8*j+4] & logic22[8*j+3] ,
+        logic31[8*j+5] = logic21[8*j+5] | (logic21[8*j+3] & logic22[8*j+5]),
+        logic32[8*j+5] = logic22[8*j+5] & logic22[8*j+3] ,
+        logic31[8*j+6] = logic21[8*j+6] | (logic21[8*j+3] & logic22[8*j+6]),
+        logic32[8*j+6] = logic22[8*j+6] & logic22[8*j+3] ,
+        logic31[8*j+7] = logic21[8*j+7] | (logic21[8*j+3] & logic22[8*j+7]),
+        logic32[8*j+7] = logic22[8*j+7] & logic22[8*j+3] ;
+end
+endgenerate
+
+
+
+generate
+begin
+for(j=0;j<2;j=j+1)
+  assign logic41[16*j] = logic31[16*j] ,
+         logic42[16*j] = logic32[16*j],
+			logic41[16*j+1] = logic31[16*j+1] ,
+			logic42[16*j+1] = logic32[16*j+1],
+			logic41[16*j+2] = logic31[16*j+2] ,
+			logic42[16*j+2] = logic32[16*j+2],
+			logic41[16*j+3] = logic31[16*j+3] ,
+			logic42[16*j+3] = logic32[16*j+3],
+			logic41[16*j+4] = logic31[16*j+4] ,
+			logic42[16*j+4] = logic32[16*j+4],
+			logic41[16*j+5] = logic31[16*j+5] ,
+			logic42[16*j+5] = logic32[16*j+5],
+			logic41[16*j+6] = logic31[16*j+6] ,
+			logic42[16*j+6] = logic32[16*j+6],
+			logic41[16*j+7] = logic31[16*j+7] ,
+			logic42[16*j+7] = logic32[16*j+7];
+end
+endgenerate
+
+generate
+begin
+for(j=0;j<2;j=j+1)
+  assign logic41[16*j+8] = logic31[16*j+8] | (logic31[16*j+7] & logic32[16*j+8]),
+			logic42[16*j+8] = logic32[16*j+8] & logic32[16*j+7] ,
+			logic41[16*j+9] = logic31[16*j+9] | (logic31[16*j+7] & logic32[16*j+9]),
+			logic42[16*j+9] = logic32[16*j+9] & logic32[16*j+7] ,
+			logic41[16*j+10] = logic31[16*j+10] | (logic31[16*j+7] & logic32[16*j+10]),
+			logic42[16*j+10] = logic32[16*j+10] & logic32[16*j+7] ,
+			logic41[16*j+11] = logic31[16*j+11] | (logic31[16*j+7] & logic32[16*j+11]),
+			logic42[16*j+11] = logic32[16*j+11] & logic32[16*j+7] ,
+			logic41[16*j+12] = logic31[16*j+12] | (logic31[16*j+7] & logic32[16*j+12]),
+			logic42[16*j+12] = logic32[16*j+12] & logic32[16*j+7] ,
+			logic41[16*j+13] = logic31[16*j+13] | (logic31[16*j+7] & logic32[16*j+13]),
+			logic42[16*j+13] = logic32[16*j+13] & logic32[16*j+7] ,
+			logic41[16*j+14] = logic31[16*j+14] | (logic31[16*j+7] & logic32[16*j+14]),
+			logic42[16*j+14] = logic32[16*j+14] & logic32[16*j+7] ,
+			logic41[16*j+15] = logic31[16*j+15] | (logic31[16*j+7] & logic32[16*j+15]),
+			logic42[16*j+15] = logic32[16*j+15] & logic32[16*j+7] ;
+end
+endgenerate
+
+
+
+generate
+begin
+for(j=0;j<1;j=j+1)
+  assign logic51[32*j] = logic41[32*j] ,
+			logic52[32*j] = logic42[32*j],
+			logic51[32*j+1] = logic41[32*j+1] ,
+			logic52[32*j+1] = logic42[32*j+1],
+			logic51[32*j+2] = logic41[32*j+2] ,
+			logic52[32*j+2] = logic42[32*j+2],
+			logic51[32*j+3] = logic41[32*j+3] ,
+			logic52[32*j+3] = logic42[32*j+3],
+			logic51[32*j+4] = logic41[32*j+4] ,
+			logic52[32*j+4] = logic42[32*j+4],
+			logic51[32*j+5] = logic41[32*j+5] ,
+			logic52[32*j+5] = logic42[32*j+5],
+			logic51[32*j+6] = logic41[32*j+6] ,
+			logic52[32*j+6] = logic42[32*j+6],
+			logic51[32*j+7] = logic41[32*j+7] ,
+			logic52[32*j+7] = logic42[32*j+7],
+			logic51[32*j+8] = logic41[32*j+8] ,
+			logic52[32*j+8] = logic42[32*j+8],
+			logic51[32*j+9] = logic41[32*j+9] ,
+			logic52[32*j+9] = logic42[32*j+9],
+			logic51[32*j+10] = logic41[32*j+10] ,
+			logic52[32*j+10] = logic42[32*j+10],
+			logic51[32*j+11] = logic41[32*j+11] ,
+			logic52[32*j+11] = logic42[32*j+11],
+			logic51[32*j+12] = logic41[32*j+12] ,
+			logic52[32*j+12] = logic42[32*j+12],
+			logic51[32*j+13] = logic41[32*j+13] ,
+			logic52[32*j+13] = logic42[32*j+13],
+			logic51[32*j+14] = logic41[32*j+14] ,
+			logic52[32*j+14] = logic42[32*j+14],
+			logic51[32*j+15] = logic41[32*j+15] ,
+			logic52[32*j+15] = logic42[32*j+15];
+end
+endgenerate
+
+
+
+generate
+begin
+for(j=0;j<1;j=j+1)
+  assign logic51[32*j+16] = logic41[32*j+16] | (logic41[32*j+15] & logic42[32*j+16]),
+			logic52[32*j+16] = logic42[32*j+16] & logic42[32*j+15] ,
+			logic51[32*j+17] = logic41[32*j+17] | (logic41[32*j+15] & logic42[32*j+17]),
+			logic52[32*j+17] = logic42[32*j+17] & logic42[32*j+15] ,
+			logic51[32*j+18] = logic41[32*j+18] | (logic41[32*j+15] & logic42[32*j+18]),
+			logic52[32*j+18] = logic42[32*j+18] & logic42[32*j+15] ,
+			logic51[32*j+19] = logic41[32*j+19] | (logic41[32*j+15] & logic42[32*j+19]),
+			logic52[32*j+19] = logic42[32*j+19] & logic42[32*j+15] ,
+			logic51[32*j+20] = logic41[32*j+20] | (logic41[32*j+15] & logic42[32*j+20]),
+			logic52[32*j+20] = logic42[32*j+20] & logic42[32*j+15] ,
+			logic51[32*j+21] = logic41[32*j+21] | (logic41[32*j+15] & logic42[32*j+21]),
+			logic52[32*j+21] = logic42[32*j+21] & logic42[32*j+15] ,
+			logic51[32*j+22] = logic41[32*j+22] | (logic41[32*j+15] & logic42[32*j+22]),
+			logic52[32*j+22] = logic42[32*j+22] & logic42[32*j+15] ,
+			logic51[32*j+23] = logic41[32*j+23] | (logic41[32*j+15] & logic42[32*j+23]),
+			logic52[32*j+23] = logic42[32*j+23] & logic42[32*j+15] ,
+			logic51[32*j+24] = logic41[32*j+24] | (logic41[32*j+15] & logic42[32*j+24]),
+			logic52[32*j+24] = logic42[32*j+24] & logic42[32*j+15] ,
+			logic51[32*j+25] = logic41[32*j+25] | (logic41[32*j+15] & logic42[32*j+25]),
+			logic52[32*j+25] = logic42[32*j+25] & logic42[32*j+15] ,
+			logic51[32*j+26] = logic41[32*j+26] | (logic41[32*j+15] & logic42[32*j+26]),
+			logic52[32*j+26] = logic42[32*j+26] & logic42[32*j+15] ,
+			logic51[32*j+27] = logic41[32*j+27] | (logic41[32*j+15] & logic42[32*j+27]),
+			logic52[32*j+27] = logic42[32*j+27] & logic42[32*j+15] ,
+			logic51[32*j+28] = logic41[32*j+28] | (logic41[32*j+15] & logic42[32*j+28]),
+			logic52[32*j+28] = logic42[32*j+28] & logic42[32*j+15] ,
+			logic51[32*j+29] = logic41[32*j+29] | (logic41[32*j+15] & logic42[32*j+29]),
+			logic52[32*j+29] = logic42[32*j+29] & logic42[32*j+15] ,
+			logic51[32*j+30] = logic41[32*j+30] | (logic41[32*j+15] & logic42[32*j+30]),
+			logic52[32*j+30] = logic42[32*j+30] & logic42[32*j+15] ,
+			logic51[32*j+31] = logic41[32*j+31] | (logic41[32*j+15] & logic42[32*j+31]),
+			logic52[32*j+31] = logic42[32*j+31] & logic42[32*j+15] ;
+end
+endgenerate
+
+
+assign sum[0] = cin ^ logic02[0];
+begin
+for(i=0;i<31;i=i+1)
+ assign sum[i+1] = logic51[i] ^ logic02[i+1];
+end
+
+assign cout = logic51[31];
+
+endmodule
+
+module skstimulus;
+
+	// Inputs
+	reg [31:0] d1;
+	reg [31:0] d2;
+	reg cin;
+
+	// Outputs
+	wire [31:0] sum;
+	wire cout;
+
+	// Instantiate the Unit Under Test (UUT)
+	skadder uut (
+		.d1(d1), 
+		.d2(d2), 
+		.cin(cin), 
+		.sum(sum), 
+		.cout(cout)
+	);
+
+	initial begin
+		// Initialize Inputs
+		d1 = 0;
+		d2 = 0;
+		cin = 0;
+
+		// Wait 100 ns for global reset to finish
+		#100;
+        
+		// Add stimulus here
+
+
+	end
+      
+ initial begin
+ 
+	d1=32'b00000000000000000000000000001111;
+	
+	d2=32'b01010101010101010101010101010101;
+end
+
+
+
+endmodule
+
+
